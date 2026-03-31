@@ -1,0 +1,42 @@
+services:
+  - type: web
+    name: garapexpress-api
+    runtime: node
+    plan: free
+    buildCommand: bash render-build.sh
+    startCommand: npm run serve
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: DATABASE_URL
+        fromDatabase:
+          name: garapexpress-db
+          property: connectionString
+      - key: TWILIO_SID
+        sync: false
+      - key: TWILIO_AUTH_TOKEN
+        sync: false
+      - key: TWILIO_FROM
+        sync: false
+      - key: SMTP_HOST
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: 587
+      - key: SMTP_SECURE
+        value: false
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: FRONTEND_URL
+        value: https://garapexpress-mobile.vercel.app
+
+databases:
+  - name: garapexpress-db
+    databaseName: garapexpress_db
+    user: garapexpress_user
+    plan: free
+    region: oregon
+    previewPlan: free
