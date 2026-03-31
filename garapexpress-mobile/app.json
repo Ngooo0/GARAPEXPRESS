@@ -34,7 +34,7 @@
       "typedRoutes": true
     },
     "extra": {
-      "EXPO_PUBLIC_API_URL": "http://172.20.10.5:3000"
+      "EXPO_PUBLIC_API_URL": "https://garapexpress.onrender.com"
     }
   }
 }
