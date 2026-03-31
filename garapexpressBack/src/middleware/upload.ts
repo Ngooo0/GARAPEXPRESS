@@ -2,6 +2,19 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 
+// Type pour les fichiers uploaded
+interface UploadedFile {
+  fieldname: string;
+  originalname: string;
+  encoding: string;
+  mimetype: string;
+  size: number;
+  destination: string;
+  filename: string;
+  path: string;
+  buffer: Buffer;
+}
+
 // Creer le dossier uploads s'il n'existe pas
 const uploadDir = path.join(__dirname, '../../uploads');
 if (!fs.existsSync(uploadDir)) {
@@ -21,7 +34,7 @@ const storage = multer.diskStorage({
 });
 
 // Filtrer les fichiers images
-const fileFilter = (req: any, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
+const fileFilter = (req: any, file: UploadedFile, cb: multer.FileFilterCallback) => {
   const allowedTypes = /jpeg|jpg|png|pdf/;
   const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
   const mimetype = allowedTypes.test(file.mimetype);
