@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'garapexpress_secret_key_2024';
 
-export interface AuthRequest extends Request {
+export interface AuthRequest extends Request<any, any> {
   user?: any;
 }
 
