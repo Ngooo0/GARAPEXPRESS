@@ -1,5 +1,5 @@
 name: Backend CD
-
+# postgresql://garapexpress:Ax4gYROdXcviIL1w1V2FXZsAwfOS5kDH@dpg-d75q836slomc73e02mb0-a/garapexpress
 on:
   push:
     branches: [master]
@@ -17,8 +17,8 @@ jobs:
         with:
           node-version: '18.x'
 
-      - name: Install Render CLI
-        run: npm install -g @render.Render-cli
+      - name: Install Dependencies
+        run: npm ci
 
       - name: Deploy to Render
         run: |
