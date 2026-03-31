@@ -30,8 +30,9 @@ export function verifyToken(token: string): any {
 }
 
 // Middleware d'authentification
-export function authenticate(req: AuthRequest, res: Response, next: NextFunction): void {
-  const authHeader = req.headers.authorization;
+export function authenticate(req: Request, res: Response, next: NextFunction): void {
+  const authRequest = req as AuthRequest;
+  const authHeader = authRequest.headers.authorization;
   
   if (!authHeader) {
     res.status(401).json({ error: 'Token manquant' });
@@ -49,7 +50,7 @@ export function authenticate(req: AuthRequest, res: Response, next: NextFunction
     return;
   }
   
-  req.user = decoded as { id: number; email: string; role: 'client' | 'livreur' | 'admin' };
+  authRequest.user = decoded as { id: number; email: string; role: 'client' | 'livreur' | 'admin' };
   next();
 }
 
@@ -60,12 +61,12 @@ export function authorize(...roles: string[]) {
       res.status(401).json({ error: 'Non authentifie' });
       return;
     }
-    
+
     if (!roles.includes(req.user.role)) {
       res.status(403).json({ error: 'Accès refusé' });
       return;
     }
-    
+
     next();
   };
 }
