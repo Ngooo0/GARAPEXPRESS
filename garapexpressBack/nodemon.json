@@ -1,0 +1,18 @@
+{
+  "watch": ["src"],
+  "ext": "ts,json",
+  "ignore": [
+    "node_modules",
+    "dist",
+    "build",
+    ".git",
+    "uploads",
+    "prisma/migrations",
+    "**/node_modules/**"
+  ],
+  "exec": "ts-node src/index.ts",
+  "polling": 1000,
+  "env": {
+    "NODE_ENV": "development"
+  }
+}

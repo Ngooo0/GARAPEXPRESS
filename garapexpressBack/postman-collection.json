@@ -1,0 +1,369 @@
+{
+  "info": {
+    "name": "GarapExpress API",
+    "description": "API pour l'application de livraison de médicaments",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "item": [
+        {
+          "name": "Health",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/../health"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Utilisateurs",
+      "item": [
+        {
+          "name": "Créer utilisateur",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/utilisateurs/create",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Diop\",\n  \"prenom\": \"Moussa\",\n  \"telephone\": \"771234567\",\n  \"email\": \"moussa@email.com\",\n  \"motDePasse\": \"password123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Connexion",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/utilisateurs/login",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"moussa@email.com\",\n  \"motDePasse\": \"password123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Inscription client",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/utilisateurs/register/client",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Sall\",\n  \"prenom\": \"Aminata\",\n  \"telephone\": \"762345678\",\n  \"email\": \"aminata@email.com\",\n  \"motDePasse\": \"password123\",\n  \"adresse\": \"Point E, Dakar\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Inscription livreur",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/utilisateurs/register/livreur",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Ndiaye\",\n  \"prenom\": \"Mamadou\",\n  \"telephone\": \"771111111\",\n  \"email\": \"mamadou@email.com\",\n  \"motDePasse\": \"password123\",\n  \"vehicule\": \"Moto\",\n  \"immatriculation\": \"DK-1234-AB\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Liste utilisateurs",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/utilisateurs"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pharmacies",
+      "item": [
+        {
+          "name": "Créer pharmacie",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/pharmacies",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"raisonSociale\": \"Pharmacie du Centre\",\n  \"adresse\": \"Avenue Léopold Sédar Senghor, Dakar\",\n  \"numeroAgrement\": \"PHA-2024-001\",\n  \"estDeGarde\": true,\n  \"horaires\": \"08h00-20h00\",\n  \"latitude\": 14.7167,\n  \"longitude\": -17.4667\n}"
+            }
+          }
+        },
+        {
+          "name": "Liste pharmacies",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/pharmacies"
+          }
+        },
+        {
+          "name": "Pharmacies de garde",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/pharmacies/garde"
+          }
+        },
+        {
+          "name": "Pharmacies à proximité",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/pharmacies/extended/proximite?lat=14.6928&lng=-17.4467&rayon=10"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Médicaments",
+      "item": [
+        {
+          "name": "Créer médicament",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/medicaments",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Doliprane\",\n  \"DCI\": \"Paracétamol\",\n  \"categorie\": \"Antalgique\",\n  \"surOrdonnance\": false,\n  \"stock\": 100,\n  \"prix\": 1500\n}"
+            }
+          }
+        },
+        {
+          "name": "Liste médicaments",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/medicaments"
+          }
+        },
+        {
+          "name": "Rechercher médicaments",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/medicaments/search?q=Doliprane"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Commandes",
+      "item": [
+        {
+          "name": "Créer commande",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/commandes",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"dateCommande\": \"2024-01-15T10:00:00Z\",\n  \"statut\": \"en_attente\",\n  \"montantTotal\": 5000,\n  \"adresseLivraison\": \"Point E, Dakar\",\n  \"clientId\": 1,\n  \"pharmacieId\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "Liste commandes",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/commandes"
+          }
+        },
+        {
+          "name": "Modifier statut",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/commandes/1/statut",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"statut\": \"livre\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Livraisons",
+      "item": [
+        {
+          "name": "Calculer frais livraison",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/livraisons/extended/calcul-frais",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pharmacieLat\": 14.7167,\n  \"pharmacieLng\": -17.4667,\n  \"clientLat\": 14.6928,\n  \"clientLng\": -17.4467\n}"
+            }
+          }
+        },
+        {
+          "name": "Créer livraison",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/livraisons",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"heureDepart\": \"2024-01-15T14:00:00Z\",\n  \"heureArrivee\": null,\n  \"statut\": \"en_cours\",\n  \"adresse\": \"Point E, Dakar\",\n  \"commandeId\": 1,\n  \"livreurId\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "Statistiques livreur",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/livraisons/extended/stats/1"
+          }
+        },
+        {
+          "name": "Historique livreur",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/livraisons/extended/historique/1"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Paiements",
+      "item": [
+        {
+          "name": "Créer paiement",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/paiements",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"montant\": 5000,\n  \"modePaiement\": \"mobile_money\",\n  \"statut\": \"en_attente\",\n  \"dateTransaction\": \"2024-01-15T10:05:00Z\",\n  \"commandeId\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "Liste paiements",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/paiements"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Notifications",
+      "item": [
+        {
+          "name": "Créer notification",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/notifications",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Votre commande est en cours de livraison\",\n  \"type\": \"commande\",\n  \"dateEnvoi\": \"2024-01-15T14:00:00Z\",\n  \"lu\": false,\n  \"utilisateurId\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "Notifications utilisateur",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/notifications/utilisateur/1"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Statistiques Admin",
+      "item": [
+        {
+          "name": "Statistiques globales",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/stats"
+          }
+        },
+        {
+          "name": "Statistiques pharmacies",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/stats/pharmacies"
+          }
+        },
+        {
+          "name": "Statistiques livreurs",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/stats/livreurs"
+          }
+        }
+      ]
+    }
+  ]
+}

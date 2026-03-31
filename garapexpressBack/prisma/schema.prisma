@@ -1,0 +1,188 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model Utilisateur {
+  id           Int      @id @default(autoincrement())
+  nom          String
+  prenom       String
+  telephone    String
+  email        String   @unique
+  motDePasse   String
+  createdAt    DateTime @default(now())
+
+  client       Client?
+  livreur      Livreur?
+  admin        Admin?
+  notifications Notification[]
+  
+  // Relations demandeur (utilisateur qui initiate la demande)
+  relationsDemandeur RelationUtilisateur[] @relation("RelationDemandeur")
+  // Relations receveur (utilisateur qui recoit la demande)
+  relationsRecues    RelationUtilisateur[] @relation("RelationReceveur")
+}
+
+model Client {
+  id        Int     @id
+  adresse   String
+
+  utilisateur Utilisateur @relation(fields: [id], references: [id])
+
+  commandes Commande[]
+}
+
+model Livreur {
+  id               Int     @id
+  vehicule         String
+  disponibilite    Boolean
+  noteMoyenne      Float
+  immatriculation  String
+
+  utilisateur Utilisateur @relation(fields: [id], references: [id])
+
+  livraisons Livraison[]
+}
+
+model Admin {
+  id        Int     @id
+  createdAt DateTime
+
+  utilisateur Utilisateur @relation(fields: [id], references: [id])
+}
+
+model Pharmacie {
+  id               Int      @id @default(autoincrement())
+  raisonSociale    String
+  adresse          String
+  numeroAgrement   String    @unique
+  estDeGarde       Boolean
+  horaires         String
+  latitude         Float
+  longitude        Float
+  telephone        String?
+  email            String?   @unique
+  motDePasse       String?
+
+  catalogues CataloguePharmacie[]
+  commandes  Commande[]
+}
+
+model Medicament {
+  id            Int     @id @default(autoincrement())
+  nom           String
+  DCI           String
+  categorie     String
+  surOrdonnance Boolean
+  stock         Int
+  prix          Float
+
+  catalogues CataloguePharmacie[]
+}
+
+model CataloguePharmacie {
+  id             Int   @id @default(autoincrement())
+  prix           Float
+  quantiteStock  Int
+  disponibilite  Boolean
+  dateMAJ        DateTime
+
+  pharmacieId    Int
+  medicamentId   Int
+
+  pharmacie   Pharmacie  @relation(fields: [pharmacieId], references: [id])
+  medicament  Medicament @relation(fields: [medicamentId], references: [id])
+}
+
+model Commande {
+  id                 Int      @id @default(autoincrement())
+  dateCommande       DateTime
+  statut             String
+  montantTotal       Float
+  adresseLivraison   String
+
+  clientId     Int
+  pharmacieId  Int
+
+  client     Client     @relation(fields: [clientId], references: [id])
+  pharmacie  Pharmacie  @relation(fields: [pharmacieId], references: [id])
+
+  livraison   Livraison?
+  paiement    Paiement?
+  ordonnance  Ordonnance?
+}
+
+model Livraison {
+  id            Int      @id @default(autoincrement())
+  heureDepart   DateTime
+  heureArrivee  DateTime
+  statut        String
+  adresse       String
+
+  commandeId Int  @unique
+  livreurId  Int
+
+  commande Commande @relation(fields: [commandeId], references: [id])
+  livreur  Livreur  @relation(fields: [livreurId], references: [id])
+}
+
+model Paiement {
+  id               Int      @id @default(autoincrement())
+  montant          Float
+  modePaiement     String
+  statut           String
+  dateTransaction  DateTime
+
+  commandeId Int @unique
+
+  commande Commande @relation(fields: [commandeId], references: [id])
+}
+
+model Ordonnance {
+  id            Int      @id @default(autoincrement())
+  dateEmission  DateTime
+  fichier       String
+  statut        String
+
+  commandeId Int @unique
+
+  commande Commande @relation(fields: [commandeId], references: [id])
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  message   String
+  type      String
+  dateEnvoi DateTime
+  lu        Boolean
+
+  utilisateurId Int
+
+  utilisateur Utilisateur @relation(fields: [utilisateurId], references: [id])
+}
+
+// Relation entre utilisateurs (amis/connexions)
+model RelationUtilisateur {
+  id          Int      @id @default(autoincrement())
+  type        String   // "ami", "famille", "collegue", etc.
+  statut      String   // "en_attente", "accepte", "refuse"
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  demandeurId Int
+  receveurId  Int
+
+  demandeur   Utilisateur @relation("RelationDemandeur", fields: [demandeurId], references: [id])
+  receveur    Utilisateur @relation("RelationReceveur", fields: [receveurId], references: [id])
+
+  @@unique([demandeurId, receveurId])
+}
