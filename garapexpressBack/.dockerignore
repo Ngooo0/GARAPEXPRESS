@@ -1,0 +1,32 @@
+# Git
+.git
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# Environment
+.env.local
+.env.*.local
+
+# Build outputs
+dist/
+build/
+
+# Test
+coverage/
+
+# Misc
+*.md
+.DS_Store
+Thumbs.db
