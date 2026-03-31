@@ -4,9 +4,17 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 class EmailService {
-  private transporter: nodemailer.Transporter;
+  private transporter: nodemailer.Transporter | null;
+  private isConfigured: boolean;
 
   constructor() {
+    if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
+      console.warn('⚠️  Email credentials not configured - Email service disabled');
+      this.transporter = null;
+      this.isConfigured = false;
+      return;
+    }
+
     this.transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST || 'smtp.gmail.com',
       port: parseInt(process.env.SMTP_PORT || '587'),
@@ -16,9 +24,17 @@ class EmailService {
         pass: process.env.SMTP_PASS,
       },
     });
+    
+    this.isConfigured = true;
+    console.log('✅ Email service initialized');
   }
 
   async sendPasswordResetEmail(email: string, resetToken: string): Promise<boolean> {
+    if (!this.isConfigured || !this.transporter) {
+      console.warn('⚠️  Email service not configured - skipping password reset email');
+      return false;
+    }
+
     try {
       const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:8081'}/reset-password?token=${resetToken}&email=${encodeURIComponent(email)}`;
 
@@ -55,7 +71,7 @@ class EmailService {
         `,
       };
 
-      await this.transporter.sendMail(mailOptions);
+      await this.transporter!.sendMail(mailOptions);
       console.log(`Email de réinitialisation envoyé à ${email}`);
       return true;
     } catch (error) {
@@ -65,6 +81,11 @@ class EmailService {
   }
 
   async sendVerificationEmail(email: string, verificationCode: string): Promise<boolean> {
+    if (!this.isConfigured || !this.transporter) {
+      console.warn('⚠️  Email service not configured - skipping verification email');
+      return false;
+    }
+
     try {
       const mailOptions = {
         from: `"GarapExpress" <${process.env.SMTP_USER}>`,
@@ -96,7 +117,7 @@ class EmailService {
         `,
       };
 
-      await this.transporter.sendMail(mailOptions);
+      await this.transporter!.sendMail(mailOptions);
       console.log(`Email de vérification envoyé à ${email}`);
       return true;
     } catch (error) {
@@ -141,7 +162,7 @@ class EmailService {
         `,
       };
 
-      await this.transporter.sendMail(mailOptions);
+      await this.transporter!.sendMail(mailOptions);
       console.log(`Code de vérification envoyé à ${email}`);
       return true;
     } catch (error) {

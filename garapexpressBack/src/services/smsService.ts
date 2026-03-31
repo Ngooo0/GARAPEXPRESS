@@ -4,8 +4,9 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 class SmsService {
-  private client: twilio.Twilio;
+  private client: twilio.Twilio | null;
   private fromNumber: string;
+  private isConfigured: boolean;
 
   constructor() {
     const accountSid = process.env.TWILIO_SID;
@@ -13,13 +14,23 @@ class SmsService {
     this.fromNumber = process.env.TWILIO_FROM || '';
 
     if (!accountSid || !authToken) {
-      throw new Error('Twilio credentials not configured');
+      console.warn('⚠️  Twilio credentials not configured - SMS service disabled');
+      this.client = null;
+      this.isConfigured = false;
+      return;
     }
 
     this.client = twilio(accountSid, authToken);
+    this.isConfigured = true;
+    console.log('✅ Twilio SMS service initialized');
   }
 
   async sendVerificationCode(phoneNumber: string, code: string): Promise<boolean> {
+    if (!this.isConfigured || !this.client) {
+      console.warn('⚠️  SMS service not configured - skipping SMS send');
+      return false;
+    }
+
     try {
       // Formater le numéro pour Twilio (enlever les espaces et ajouter + si nécessaire)
       let formattedPhone = phoneNumber.replace(/\s/g, '');
@@ -42,6 +53,11 @@ class SmsService {
   }
 
   async sendCustomMessage(phoneNumber: string, message: string): Promise<boolean> {
+    if (!this.isConfigured || !this.client) {
+      console.warn('⚠️  SMS service not configured - skipping SMS send');
+      return false;
+    }
+
     try {
       let formattedPhone = phoneNumber.replace(/\s/g, '');
       if (!formattedPhone.startsWith('+')) {
