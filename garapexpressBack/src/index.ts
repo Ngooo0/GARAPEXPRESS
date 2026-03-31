@@ -68,6 +68,11 @@ app.use('/api/notifications', notificationRouter);
 app.use('/api/catalogues', cataloguePharmacieRouter);
 app.use('/api/stats', statsRouter);
 
+// Root route
+app.get('/', (req, res) => {
+    res.json({ status: 'OK', message: 'GarapExpress API is running', version: '1.0.0' });
+});
+
 // Health check
 app.get('/health', (req, res) => {
     res.json({ status: 'OK', message: 'GarapExpress API is running' });
