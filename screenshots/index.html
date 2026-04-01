@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GarapExpress - Screenshots de l'Application</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f3f4f6 0%, #ffffff 100%);
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        h1 {
+            font-size: 48px;
+            color: #1f2937;
+            margin-bottom: 10px;
+        }
+        
+        .accent {
+            color: #22c55e;
+        }
+        
+        .subtitle {
+            font-size: 18px;
+            color: #6b7280;
+            margin-bottom: 20px;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: #22c55e;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+        
+        .screenshot-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .screenshot-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 32px rgba(34, 197, 94, 0.15);
+        }
+        
+        .screenshot-image {
+            width: 100%;
+            height: 600px;
+            object-fit: cover;
+            background: #f3f4f6;
+        }
+        
+        .screenshot-info {
+            padding: 24px;
+        }
+        
+        .screenshot-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+        
+        .screenshot-desc {
+            font-size: 14px;
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+        
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .feature-tag {
+            background: #f0fdf4;
+            color: #22c55e;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid #dcfce7;
+        }
+        
+        .stats {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 60px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 40px;
+            font-weight: 700;
+            color: #22c55e;
+            margin-bottom: 8px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+        
+        footer {
+            text-align: center;
+            font-size: 14px;
+            color: #9ca3af;
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            .screenshot-card {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Garap<span class="accent">Express</span></h1>
+            <p class="subtitle">Application Mobile de Livraison de Médicaments</p>
+            <span class="badge">📸 Screenshots Officiel</span>
+        </header>
+
+        <div class="stats">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">11</div>
+                    <div class="stat-label">Screenshots Capturés</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">4</div>
+                    <div class="stat-label">Rôles Supportés</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">375px</div>
+                    <div class="stat-label">Largeur Mobile</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">2x</div>
+                    <div class="stat-label">Densité Pixel</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="gallery">
+            <div class="screenshot-card">
+                <img src="01-welcome-login.png" class="screenshot-image" alt="Écran d'accueil">
+                <div class="screenshot-info">
+                    <h3 class="screenshot-title">🔐 Accueil & Login</h3>
+                    <p class="screenshot-desc">Écran de bienvenue avec sélection de rôle et formulaire de connexion</p>
+                    <div class="features">
+                        <span class="feature-tag">4 Rôles</span>
+                        <span class="feature-tag">Responsive</span>
+                        <span class="feature-tag">Form Validation</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="screenshot-card">
+                <img src="05-login-filled.png" class="screenshot-image" alt="Formulaire rempli">
+                <div class="screenshot-info">
+                    <h3 class="screenshot-title">✍️ Login Rempli</h3>
+                    <p class="screenshot-desc">Formulaire complété avec email de test et mot de passe masqué</p>
+                    <div class="features">
+                        <span class="feature-tag">Email Input</span>
+                        <span class="feature-tag">Password Mask</span>
+                        <span class="feature-tag">Eye Toggle</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="screenshot-card">
+                <img src="07-route-2--signup.png" class="screenshot-image" alt="Signup">
+                <div class="screenshot-info">
+                    <h3 class="screenshot-title">📝 Inscription</h3>
+                    <p class="screenshot-desc">Formulaire d'inscription complet avec tous les champs requis</p>
+                    <div class="features">
+                        <span class="feature-tag">6 Champs</span>
+                        <span class="feature-tag">Required Fields</span>
+                        <span class="feature-tag">Terms Checkbox</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="screenshot-card">
+                <img src="07-route-3--onboarding.png" class="screenshot-image" alt="Onboarding">
+                <div class="screenshot-info">
+                    <h3 class="screenshot-title">🎯 Onboarding</h3>
+                    <p class="screenshot-desc">Screens interactifs présentant les fonctionnalités principales</p>
+                    <div class="features">
+                        <span class="feature-tag">Multi-Step</span>
+                        <span class="feature-tag">Illustrations</span>
+                        <span class="feature-tag">Pagination</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats">
+            <h2 style="margin-bottom: 24px; color: #1f2937;">💡 Points Clés du Design</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px;">
+                <div>
+                    <h4 style="color: #22c55e; margin-bottom: 8px;">🎨 Palette Couleur</h4>
+                    <p style="color: #6b7280; font-size: 14px;">Primaire: #22c55e (Vert Médical)<br>Accent: #0ea5e9 (Bleu Ciel)<br>Fond: #f3f4f6 (Gris Clair)</p>
+                </div>
+                <div>
+                    <h4 style="color: #22c55e; margin-bottom: 8px;">📱 Responsive Design</h4>
+                    <p style="color: #6b7280; font-size: 14px;">375px × 812px (iPhone)<br>2x DPI (Retina Display)<br>Mobile-First Approach</p>
+                </div>
+                <div>
+                    <h4 style="color: #22c55e; margin-bottom: 8px;">✨ Fonctionnalités</h4>
+                    <p style="color: #6b7280; font-size: 14px;">Multi-Rôles: Client, Pharmacien, Livreur, Admin<br>Authentification Sécurisée<br>Form Validation</p>
+                </div>
+                <div>
+                    <h4 style="color: #22c55e; margin-bottom: 8px;">🔄 Navigation</h4>
+                    <p style="color: #6b7280; font-size: 14px;">Routes: /login, /signup, /onboarding<br>Tab Navigation<br>Deep Linking Support</p>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Generated: 2026-04-01 | GarapExpress v1.0.0 | All Rights Reserved © 2026</p>
+        </footer>
+    </div>
+</body>
+</html>

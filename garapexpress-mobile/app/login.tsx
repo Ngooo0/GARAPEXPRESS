@@ -61,8 +61,27 @@ export default function LoginScreen() {
         router.replace(getRouteForRole(role));
       }, 700);
     } catch (error: any) {
-      console.log('Login error:', error.message);
-      showPopup('Connexion impossible', error.message || 'Email ou mot de passe incorrect. Vérifiez que le serveur backend est actif.', 'error');
+      // Afficher le vrai message d'erreur pour le debug
+      let errorMessage = 'Erreur inconnue';
+      
+      if (error instanceof Error) {
+        errorMessage = error.message;
+        console.error('Login error (Error instance):', {
+          message: error.message,
+          cause: (error as any).cause,
+          stack: error.stack,
+        });
+      } else if (typeof error === 'string') {
+        errorMessage = error;
+        console.error('Login error (string):', error);
+      } else if (error && typeof error === 'object') {
+        errorMessage = error.message || error.error || JSON.stringify(error);
+        console.error('Login error (object):', error);
+      } else {
+        console.error('Login error (unknown):', error);
+      }
+      
+      showPopup('Connexion impossible', errorMessage || 'Email ou mot de passe incorrect. Vérifiez que le serveur backend est actif.', 'error');
     } finally {
       setIsLoading(false);
     }

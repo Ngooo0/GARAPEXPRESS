@@ -16,7 +16,7 @@ export class utilisateurConteneur {
         return this.instance.get(key);
     }
 }
-export const utilisateurPrisma = utilisateurConteneur.get("prisma", () => new PrismaClient({} as any));
+export const utilisateurPrisma = utilisateurConteneur.get("prisma", () => new PrismaClient());
 export const utilisateurRepo = utilisateurConteneur.get("utilisateurRepo", () => new UtilisateurRepository(utilisateurPrisma));
 export const utilisateurService = utilisateurConteneur.get("utilisateurService", () => new UtilisateurService(utilisateurRepo));
 export const utilisateurController = utilisateurConteneur.get("utilisateurController", () => new UtilisateurController(utilisateurService));

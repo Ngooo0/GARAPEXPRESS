@@ -102,18 +102,27 @@ export class UtilisateurController {
     }
 
     async seConnecter(req: any, res: any) {
-
         try {
-            const infos = UtilisateurLogin.parse(req.body)
+            console.log('[Login] Received request:', { email: req.body?.email, timestamp: new Date().toISOString() });
+            
+            const infos = UtilisateurLogin.parse(req.body);
+            
+            console.log('[Login] Validation passed, calling service...');
             const token = await this.utilisateurService.login(infos.email, infos.motDePasse);
-
-            res.status(201).json({
+            
+            console.log('[Login] Token generated, sending response...');
+            res.status(200).json({
                 success: true,
                 data: token,
-                message: "Utilisateur conneccté avec succès"
-            })
-        } catch (error) {
-            res.status(400).json({ error: error })
+                message: "Utilisateur connecté avec succès"
+            });
+        } catch (error: any) {
+            console.error('[Login] Error:', error?.message || error);
+            res.status(400).json({ 
+                success: false,
+                error: error?.message || 'Erreur de connexion',
+                message: error?.message || 'Erreur de connexion'
+            });
         }
     }
 

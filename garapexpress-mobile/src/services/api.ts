@@ -6,26 +6,35 @@ console.log('API_BASE_URL:', API_BASE_URL);
 
 const TOKEN_KEY = '@garapexpress_token';
 const USER_KEY = '@garapexpress_user';
-const FETCH_TIMEOUT = 10000000; // 10 secondes
+// Timeouts: 15s pour réseau local, 45s pour Render (cold start)
+const FETCH_TIMEOUT = typeof window === 'undefined' || API_BASE_URL.includes('localhost') ? 15000 : 45000;
+const MAX_RETRIES = 2;
+const RETRY_DELAY = 1000;
 
-// Fonction utilitaire avec timeout
+// Fonction utilitaire avec timeout robuste
 function fetchWithTimeout(url: string, options: RequestInit = {}, timeout = FETCH_TIMEOUT) {
+  let timeoutId: NodeJS.Timeout;
+  
   return Promise.race([
-    fetch(url, options),
-    new Promise<Response>(() => {
-      setTimeout(() => {
-        throw new Error('Délai d\'expiration dépassé: impossible de se connecter au serveur');
+    fetch(url, options).finally(() => {
+      if (timeoutId) clearTimeout(timeoutId);
+    }),
+    new Promise<Response>((_, reject) => {
+      timeoutId = setTimeout(() => {
+        reject(new Error(`Timeout: La requête vers ${url} a pris plus de ${timeout}ms`));
       }, timeout);
     }),
   ]);
 }
 
-// Fonction utilitaire pour les requêtes
+// Fonction utilitaire pour les requêtes avec retry
 async function fetchAPI<T>(
   endpoint: string,
-  options: RequestInit = {}
+  options: RequestInit = {},
+  retryCount = 0
 ): Promise<T> {
   const token = await getToken();
+  const fullUrl = `${API_BASE_URL}${endpoint}`;
   
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
@@ -33,29 +42,65 @@ async function fetchAPI<T>(
     ...options.headers,
   };
 
+  const timeoutMs = FETCH_TIMEOUT;
+  console.log(`[API] ${retryCount > 0 ? `RETRY ${retryCount}` : 'REQUEST'} ${fullUrl} (timeout: ${timeoutMs}ms)`);
+  const startTime = Date.now();
+
   try {
-    const response = await fetchWithTimeout(`${API_BASE_URL}${endpoint}`, {
+    const response = await fetchWithTimeout(fullUrl, {
       ...options,
       headers,
-    });
+    }, timeoutMs);
+
+    const duration = Date.now() - startTime;
+    console.log(`[API] ✅ ${response.status} in ${duration}ms`);
 
     if (!response.ok) {
-      const error = await response.json().catch(() => null);
+      let errorData: any = null;
+      try {
+        errorData = await response.json();
+      } catch {
+        errorData = { error: response.statusText };
+      }
+
       const message =
-        error?.message ||
-        error?.error ||
-        `Erreur ${response.status} lors de l'appel API`;
-      throw new Error(message);
+        errorData?.message ||
+        errorData?.data?.message ||
+        errorData?.error ||
+        `HTTP ${response.status}`;
+      
+      const error = new Error(message);
+      (error as any).statusCode = response.status;
+      (error as any).cause = errorData;
+      
+      console.error(`[API Error] ${endpoint} (${duration}ms):`, message);
+      throw error;
     }
 
-    // Gérer les réponses vides (204 No Content)
     const contentType = response.headers.get('content-type');
     if (!contentType || !contentType.includes('application/json')) {
       return {} as T;
     }
 
-    return response.json();
+    const data = await response.json();
+    return data;
+    
   } catch (error) {
+    const duration = Date.now() - startTime;
+    const isTimeout = error instanceof Error && error.message.includes('Timeout');
+    
+    // Retry une seule fois sur timeout pour Render cold start
+    if (isTimeout && retryCount < MAX_RETRIES) {
+      console.log(`[API] Timeout - attente ${RETRY_DELAY}ms avant retry...`);
+      await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
+      return fetchAPI<T>(endpoint, options, retryCount + 1);
+    }
+    
+    if (error instanceof Error) {
+      console.error(`[API Error] ${endpoint} (${duration}ms):`, error.message);
+    } else {
+      console.error(`[API Error] ${endpoint} (${duration}ms):`, error);
+    }
     throw error;
   }
 }

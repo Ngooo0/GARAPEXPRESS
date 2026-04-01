@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 import { useAppStore } from '../src/store/appStore';
 import { getToken } from '../src/services/api';
 import wsService from '../src/services/websocket';
+import { startKeepAlive, stopKeepAlive } from '../src/services/keepAlive';
 
 export default function RootLayout() {
   const isAuthenticated = useAppStore((state) => state.isAuthenticated);
@@ -16,7 +17,15 @@ export default function RootLayout() {
   const fetchNotifications = useAppStore((state) => state.fetchNotifications);
   const fetchDeliveries = useAppStore((state) => state.fetchDeliveries);
 
+  // Start keep-alive on app launch (for Render cold start prevention)
   useEffect(() => {
+    startKeepAlive();
+    return () => {
+      stopKeepAlive();
+    };
+  }, []);
+
+  useEffect(() {
     if (!isAuthenticated) {
       wsService.disconnect();
       return;
